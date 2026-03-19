@@ -13,3 +13,10 @@ data/
 .env.*.local
 .env.*
 
+# Next/OpenNext Cloudflare sometimes expects this manifest at runtime:
+#   /.next/server/prefetch-hints.json
+# We keep ignoring normal Next build artifacts under `.next/`, but allow this tiny JSON.
+!public/.next/
+!public/.next/server/
+!public/.next/server/prefetch-hints.json
+
