@@ -1,0 +1,15 @@
+node_modules
+.next
+out
+dist
+coverage
+
+# Local app data (aggregated stats, cached Data Dragon, etc.)
+data/
+
+# Environment variables (keep secrets out of git)
+.env
+.env.local
+.env.*.local
+.env.*
+
