@@ -2,15 +2,22 @@ import { NextResponse } from "next/server";
 import { getRoutingGroupForPlatform, isSupportedPlatform } from "@/lib/riot/platformRouting";
 import { getPuuidByRiotId } from "@/lib/riot/account";
 import { riotFetch } from "@/lib/riot/client";
-import { createHash } from "node:crypto";
 
 export const runtime = "nodejs";
+
+async function sha256Hex(input: string): Promise<string> {
+  const data = new TextEncoder().encode(input);
+  const digest = await crypto.subtle.digest("SHA-256", data);
+  const bytes = new Uint8Array(digest);
+  return Array.from(bytes)
+    .map((b) => b.toString(16).padStart(2, "0"))
+    .join("");
+}
 
 export async function GET(request: Request) {
   try {
     const apiKey = process.env.RIOT_API_KEY ?? "";
-    const keyFingerprint =
-      apiKey.length > 0 ? createHash("sha256").update(apiKey).digest("hex").slice(0, 12) : null;
+    const keyFingerprint = apiKey.length > 0 ? (await sha256Hex(apiKey)).slice(0, 12) : null;
 
     const url = new URL(request.url);
     let region = url.searchParams.get("region");
